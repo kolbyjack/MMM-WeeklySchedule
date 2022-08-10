@@ -38,7 +38,7 @@ Module.register("MMM-WeeklySchedule", {
 	 * Create the module header. Regards configuration showWeekdayinHeader 
 	 */
 	getHeader: function() {
-		var header = this.data.header;
+		var header = this.data.header || this.translate("LESSONS");
 		if(this.config.showWeekdayinHeader) {
 			header += " " + this.translate("ON_DAY") + " " + this.getDisplayDate().format("dddd"); 
 		}
