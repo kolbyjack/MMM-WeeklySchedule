@@ -164,9 +164,6 @@ Thanks to many contributions by the community this module has been localized for
 |sv    | Swedish            |
 |zh-cn | Simplified Chinese |
 
-# Dependencies
-- [moment](https://www.npmjs.com/package/moment) (installed via `npm install`)
-
 # Notes
 - This is my first project using Node, so feel free to submit pull requests or post on the issues and I will do my best to improve the project.
 

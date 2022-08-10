@@ -40,7 +40,7 @@ Module.register("MMM-WeeklySchedule", {
 	getHeader: function() {
 		var header = this.data.header || this.translate("LESSONS");
 		if(this.config.showWeekdayinHeader) {
-			header += " " + this.translate("ON_DAY") + " " + this.getDisplayDate().format("dddd"); 
+			header += " " + this.translate("ON_DAY") + " " + this.getDisplayDate().toLocaleString(config.language, {weekday: "long"});
 		}
 		return header;
 	},
@@ -52,7 +52,7 @@ Module.register("MMM-WeeklySchedule", {
 		var date = this.getDisplayDate(); 
 
 		// get day of week and access respective element in lessons array
-		var dow = date.locale('en').format("ddd").toLowerCase();
+		var dow = date.toLocaleString('en', {weekday: "short"}).toLowerCase();
 		var lessons = this.config.schedule.lessons[dow];
 
 		// no lessons today, we return default text
@@ -88,17 +88,18 @@ Module.register("MMM-WeeklySchedule", {
 
 	getDisplayDate: function() {
 		// check if config contains a threshold 'showNextDayAfter'
+		const threshold = new Date();
 		if(this.config.showNextDayAfter) {
-			var threshold = moment().startOf("day")
-							.add(moment.duration(this.config.showNextDayAfter));
+			const after = new Date(`1970-01-01 ${this.config.showNextDayAfter} Z`);
+			threshold.setHours(after.getUTCHours(), after.getUTCMinutes(), after.getUTCSeconds());
 		} else {
-			var threshold = moment().endOf("day");
+			threshold.setHours(23, 59, 59);
 		}
 		
 		// get the current time and increment by one day if threshold time has passed
-		var now  = moment();
-		if(now.isAfter(threshold)) {
-			now = now.add(1, "day");
+		const now = new Date();
+		if(now > threshold) {
+			now.setDate(now.getDate() + 1);
 		}
 
 		return now;
@@ -144,10 +145,6 @@ Module.register("MMM-WeeklySchedule", {
 		row.appendChild(tdlesson);
 
 		return row;
-	},
-
-	getScripts: function() {
-		return ["moment.js"];
 	},
 
 	getStyles: function () {
